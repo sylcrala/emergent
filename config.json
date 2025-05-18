@@ -1,0 +1,32 @@
+{
+  "model": {
+    "name": "Mistral-7B-Instruct-v0.2",
+    "path": "/models/IRIS (mistral-7b-instruct-v0.2)",
+    "backend": "transformers",
+    "load_in_8bit": false,
+    "trust_remote_code": false
+  },
+  "memory": {
+    "bank_path": "/memory/memory_bank.json",
+    "tags_path": "/memory/tags.json",
+    "cache_enabled": true,
+    "cache_size": 100,
+    "max_recent_memories": 10,
+    "relevance_filtering": true
+  },
+  "meta_voice": {
+    "enabled": true,
+    "max_reflections_per_task": 3,
+    "reflection_strategy": "freeform",
+    "sanity_checks_enabled": true
+  },
+  "logging": {
+    "level": "INFO",
+    "log_to_file": true,
+    "log_path": "/logs/iris.log"
+  },
+  "security": {
+    "rate_limit_per_minute": 30,
+    "allow_external_scripts": false
+  }
+}
