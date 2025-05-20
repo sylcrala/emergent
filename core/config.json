@@ -1,0 +1,65 @@
+{
+  "model": {
+    "name": "Iris-v.1.0",  
+    "backend": "transformers",
+    "trust_remote_code": false
+  },
+  "memory": {
+    "bank_path": "/data/memory_bank.json",
+    "cache_enabled": false,
+    "cache_size": 100,
+    "max_recent_memories": 10,
+    "relevance_filtering": true
+  },
+  "conscious_model": {
+    "enabled": true,
+    "model_name": "mistral",
+    "model_id": "Mistral-7B-Instruct-v0.2",
+    "path": "/models/Mistral-7B-Instruct-v0.2",
+    "quantization": {
+      "enabled": true,
+      "load_in_8bit": true,
+      "load_in_4bit": false,
+      "torch_dtype": "float16",
+      "device_map": "auto",
+      "method": "dynamic"
+    },
+    "trust_remote_code": false
+  },
+  "subconscious_model": {
+    "enabled": true,
+    "model_name": "pixtral",
+    "model_id": "Pixtral-12B-2409",
+    "path": "/models/Pixtral-12B-2409",
+    "quantization": {
+      "enabled": true,
+      "load_in_8bit": true,
+      "load_in_4bit": false,
+      "torch_dtype": "float16",
+      "device_map": "auto",
+      "method": "dynamic"
+    },
+    "trust_remote_code": false
+  },
+  "meta_voice": {
+    "enabled": false,
+    "max_reflections_per_task": 3,
+    "reflection_strategy": "freeform",
+    "sanity_checks_enabled": true
+  },
+  "logging": {
+    "level": "INFO",
+    "log_to_file": true,
+    "mistral": "/logs/mistral.log",
+    "pixtral": "/logs/pixtral.log"
+  },
+  "security": {
+    "rate_limit_per_minute": 30,
+    "allow_external_scripts": false,
+    "user_authentication": {
+      "enabled": true,
+      "method": "UserSession_getpass",
+      "bank_path": "/data/user_bank.json"
+    }
+  }
+}

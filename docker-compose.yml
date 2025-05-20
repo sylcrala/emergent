@@ -8,10 +8,10 @@ services:
     stdin_open: true
     runtime: nvidia
     volumes:
-      - ./iris_app:/app                    # Live code mount
-      - ./iris_data/memory:/memory         # persistent memory
-      - ./iris_data/logs:/logs             # persistent logging
-      - ./models:/models                   # LLM model access
+      - ./iris:/app                    # Live code mount
+      - ./memory:/memory               # persistent memory
+      - ./logs:/logs                   # persistent logging
+      - ./models:/models               # LLM model access
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,utility

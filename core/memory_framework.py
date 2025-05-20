@@ -3,8 +3,8 @@ import shutil
 import uuid
 import os
 from datetime import datetime
-from logs._logger import logger, MEMORY_LEVEL, WARN_LEVEL, SYSTEM_LEVEL
-from config_loader import load_config
+from core.ext._logger import logger, MEMORY_LEVEL, WARN_LEVEL, SYSTEM_LEVEL
+from core.ext.config_loader import load_config
 
 config = load_config()
 memory_path_cfg = config["memory"]

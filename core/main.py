@@ -5,10 +5,10 @@ import logging
 import json
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 import torch
-from config_loader import load_config
-from memory.memory_io import MemoryIO
-from meta_voice import choose_meta_voice, apply_meta_voices, META_VOICE_MATRIX
-from logs._logger import logger, SYSTEM_LEVEL, WARN_LEVEL, USER_LEVEL
+from core.ext.config_loader import load_config
+from core.memory_framework import MemoryIO
+from core.ext.meta_voice import choose_meta_voice, apply_meta_voices, META_VOICE_MATRIX
+from core.ext._logger import logger, SYSTEM_LEVEL, WARN_LEVEL, USER_LEVEL
 
 #----------# GPU CHECK
 if not torch.cuda.is_available():
@@ -44,9 +44,10 @@ memory = MemoryIO(
 
 #--# Local init for model and tokenizer #--#
 model_cfg = config["model"]
-model_path = model_cfg["path"]
+mixtral_path = model_cfg["mixtral_path"]
+pixtral_path = model_cfg["pixtral_path"]
 
-model = AutoModelForCausalLM.from_pretrained(
+"""model = AutoModelForCausalLM.from_pretrained(
     model_path,
     quantization_config=quant_cfg,
     device_map="auto",
@@ -58,7 +59,12 @@ tokenizer = AutoTokenizer.from_pretrained(model_path)
 logger.log(SYSTEM_LEVEL, f"[LAUNCH] Iris started with {model.hf_device_map}")
 
 REFLECTION_INTERVAL = 5
-interaction_count = 0
+interaction_count = 0"""
+
+
+
+
+
 #--#
 
 

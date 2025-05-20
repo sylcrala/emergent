@@ -2,7 +2,7 @@ import json
 import os
 
 #--# defining config path via path expanduser for portability #--#
-CONFIG = os.path.expanduser('/home/sym/VSC/iris/config.json')
+CONFIG = os.path.expanduser('/home/sym/VSC/iris/core/config.json')
 
 
 
