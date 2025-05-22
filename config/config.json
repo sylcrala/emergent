@@ -1,8 +1,8 @@
 {
   "model": {
-    "name": "Iris-v.1.0",  
+    "name": "Iris",  
     "backend": "transformers",
-    "trust_remote_code": false
+    "version": "1.0"
   },
   "memory": {
     "bank_path": "/data/memory_bank.json",
@@ -14,13 +14,13 @@
   "conscious_model": {
     "enabled": true,
     "model_name": "mistral",
-    "model_id": "Mistral-7B-Instruct-v0.2",
+    "id": "mistralai/Mistral-7B-Instruct-v0.2",
     "path": "/models/Mistral-7B-Instruct-v0.2",
     "quantization": {
       "enabled": true,
       "load_in_8bit": true,
       "load_in_4bit": false,
-      "torch_dtype": "float16",
+      "torch_dtype": "bfloat16",
       "device_map": "auto",
       "method": "dynamic"
     },
@@ -29,13 +29,13 @@
   "subconscious_model": {
     "enabled": true,
     "model_name": "pixtral",
-    "model_id": "Pixtral-12B-2409",
+    "id": "mistralai/Pixtral-12B-2409",
     "path": "/models/Pixtral-12B-2409",
     "quantization": {
       "enabled": true,
       "load_in_8bit": true,
       "load_in_4bit": false,
-      "torch_dtype": "float16",
+      "torch_dtype": "bfloat16",
       "device_map": "auto",
       "method": "dynamic"
     },
@@ -61,5 +61,10 @@
       "method": "UserSession_getpass",
       "bank_path": "/data/user_bank.json"
     }
+  },
+  "settings": {
+    "language": "en: US",
+    "timezone": "UTC",
+    "default_to_gui": true
   }
 }

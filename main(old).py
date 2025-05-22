@@ -8,7 +8,7 @@ import torch
 from core.ext.config_loader import load_config
 from core.memory_framework import MemoryIO
 from core.ext.meta_voice import choose_meta_voice, apply_meta_voices, META_VOICE_MATRIX
-from core.ext._logger import logger, SYSTEM_LEVEL, WARN_LEVEL, USER_LEVEL
+from core._logger import logger, SYSTEM_LEVEL, WARN_LEVEL, USER_LEVEL
 
 #----------# GPU CHECK
 if not torch.cuda.is_available():

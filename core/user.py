@@ -1,4 +1,4 @@
-### ----- User Authentication Module ----- ###
+### ----- User Authentication ----- ###
 #
 #
 # handles user authentication, checking whether a user exists in the user bank and handles login/logout
@@ -10,8 +10,8 @@ import json
 
 import uuid
 import getpass
-from core.ext._logger import logger, USER_LEVEL
-from core.ext.config_loader import load_config
+from core._logger import logger, USER_LEVEL
+from core.core import load_config
 
 userbank_path = load_config()["security"]["authentication"]["bank_path"]
 
