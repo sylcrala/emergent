@@ -7,49 +7,45 @@
 
 import os
 import json
-from core._logger import logger, MEMORY_LEVEL, WARN_LEVEL, SYSTEM_LEVEL
+from ext.config_loader import main_config
+from ext._logger import logger, MEMORY_LEVEL, WARN_LEVEL, SYSTEM_LEVEL
 from pathlib import Path
-
+from user import SessionManager
+from model_manager import ModelManager
+from routing import Router
 
 
 
 
 #--# declarations
+config = main_config
+model_config = config["model"]
+session = SessionManager()
+
 
 
 
 #-# functions
 
+
+
 # function for reading/loading configuration file 
-def load_config(config_path="/iris/config/config.json"):
-    with open(config_path, "r") as f:
-        return json.load(f)
 
-# function for launching the CLI
-def launch_cli(model_config):
-    from iris.core.cli.main import run_cli
-    run_cli(model_config)
-    # CREATE CLI DIRECTORY AND SCRITPS ***************
-
-# function for launching the GUI
-def launch_gui(model_config):
-    from iris.core.gui.qt_gui import iris_gui
-    app = iris_gui(model_config)
-    app.run()
-    # CREATE GUI DIRECTORY AND SCRITPS ***************
 
 # function for initializing iris
-def initialize_iris(gui: bool = False, lazy_submodel: bool = False):
-    config = load_config()
-    model_config = config["model"]
+def initialize_iris(args):
 
+    session.user_login(args.profile)
 
+    #loading models
+    ModelManager.load_model("conscious_model")
     #checking whether sys calls for lazy_submodel:
-    if lazy_submodel:
-        model_config["subconscious"]["enabled"] = False
+    if not args.lazy_submodel:
+        ModelManager.load_model("subconscious_model")
 
     
-    if gui or config["settings"].get("default_to_gui", False):
-        launch_gui(model_config)
-    else:
-        launch_cli(model_config)
+    return {
+        "model manager": ModelManager,
+        "session": session,
+        "router": lambda prompt: Router.route(prompt, ModelManager)
+    }

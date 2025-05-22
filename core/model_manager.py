@@ -8,13 +8,13 @@
 #-- imports --#
 import os
 import json
-from core._logger import logger, SYSTEM_LEVEL
+from ext._logger import logger, SYSTEM_LEVEL
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
-from core.core import load_config
-from utils.tokenizer_tool import sanitize_tokenizer, merge_tokenizer_with_custom
+from ext.config_loader import main_config
+from utils.tokenizer_tool import TokenizerBank
 
-config = load_config("/iris/config/config.json")
+config = main_config
 
 #provides for a unified interface to the models, allowing for easy switching between the conscious and subconscious models
 class ModelManager:
@@ -22,6 +22,7 @@ class ModelManager:
         
         self.config = config
         self.models = {}
+        self.voice_mode = "neutral"
 
      
     
@@ -31,6 +32,8 @@ class ModelManager:
         #pulling info from config (role and "enabled" status)
         if role not in self.config:
             raise ValueError(f"Invalid model role: {role}")
+        
+    
         model_info = self.config[role]
         if not model_info.get("enabled", True):
             return None
@@ -38,9 +41,11 @@ class ModelManager:
 
         model_id = model_info["id"]
         tokenizer = AutoTokenizer.from_pretrained(model_id)
-        tokenizer_metadata = sanitize_tokenizer(model_id)
-        tokenizer = merge_tokenizer_with_custom(tokenizer, tokenizer_metadata)
+        tokenizer_metadata = TokenizerBank.sanitize_tokenizer(model_id)
+        tokenizer = TokenizerBank.merge_tokenizer_with_custom(tokenizer, tokenizer_metadata)
 
+        if self.voice_mode == "{self.voice_mode}":
+            model.config.quantization = self.voice_mode["generation_args"]
 
         model = AutoModelForCausalLM.from_pretrained(model_id)
         self.models[role] = (model, tokenizer)
@@ -49,6 +54,12 @@ class ModelManager:
 
     def unload_model(self, role):
         return
+    
+    def get_model(self, role):
+        return self.models.get(role, None)
+    
+    def set_voice_mode(self, voice):
+        self.voice_mode = voice
 
 
 

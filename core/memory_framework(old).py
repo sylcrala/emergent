@@ -3,7 +3,7 @@ import shutil
 import uuid
 import os
 from datetime import datetime
-from core._logger import logger, MEMORY_LEVEL, WARN_LEVEL, SYSTEM_LEVEL
+from core.ext._logger import logger, MEMORY_LEVEL, WARN_LEVEL, SYSTEM_LEVEL
 from core.core import load_config
 
 config = load_config()
@@ -118,20 +118,6 @@ class MemoryIO:
         except Exception as e:
             logger.log(MEMORY_LEVEL, f"[MemoryIO] failed to save memory: {e}")
 
-    #-# saving tags
-    def _save_tags(self):
-        try:
-            if os.path.exists(self.tags_path) and os.path.getsize(self.tags_path) >= max_file_size:
-                timestamp = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
-                rotated_path = f"{path}.{timestamp}.bak"
-                shutil.move(self.tags_path, rotated_path)
-                logger.log(MEMORY_LEVEL, f"[MemoryIO] Memory bank rotated: {rotated_path}")
-
-            with open(self.tags_path, 'w') as f:
-                json.dump(self.tags, f, indent=2)
-
-        except Exception as e:
-            logger.log(MEMORY_LEVEL, f"[MemoryIO] failed to save memory: {e}")
 
     #-# generating random id for memory storage
     def _generate_id(self):
@@ -140,20 +126,6 @@ class MemoryIO:
     #-# timestamping
     def _timestamp(self):
         return datetime.utcnow().isoformat()
-
-    #-# adding new tags
-    def add_tag(self, tag, description = "", reserved = False):
-        now = datetime.utcnow().isoformat()
-        if tag not in self.tags:
-            self.tags[tag] = {
-                "description": description,
-                "created_at": now,
-                "use_count": 0,
-                "last_used": now,
-                "reserved": reserved
-            }
-        # else optionally update description
-        self._save_tags()
 
     #-# recording tag usage
     def record_tag_usage(self, tag):
@@ -181,6 +153,7 @@ class MemoryIO:
     def add_memory(self, content, memory_type="type", tags=None, source="source", expires=None):
         memory = {
             "id": self._generate_id(),
+            "user_id": {user_id},
             "type": memory_type,
             "tags": tags or [],
             "content": content,
@@ -196,8 +169,6 @@ class MemoryIO:
 
     def get_memories(self, tags=None, memory_type=None, limit=10, include_expired=False):
         memories = self.memory_bank
-        if tags:
-            memories = [m for m in memories if any(tag in m.get("tags", []) for tag in tags)]
         if memory_type:
             memories = [m for m in memories if m.get("type") == memory_type]
         return memories[:limit]

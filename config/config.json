@@ -2,10 +2,11 @@
   "model": {
     "name": "Iris",  
     "backend": "transformers",
-    "version": "1.0"
+    "version": "1.0",
+    "lazy_submodel": false
   },
   "memory": {
-    "bank_path": "/data/memory_bank.json",
+    "bank_path": "/home/sym/VSC/iris/data/memory_bank",
     "cache_enabled": false,
     "cache_size": 100,
     "max_recent_memories": 10,
@@ -15,7 +16,7 @@
     "enabled": true,
     "model_name": "mistral",
     "id": "mistralai/Mistral-7B-Instruct-v0.2",
-    "path": "/models/Mistral-7B-Instruct-v0.2",
+    "path": "/home/sym/VSC/iris/models/Mistral-7B-Instruct-v0.2",
     "quantization": {
       "enabled": true,
       "load_in_8bit": true,
@@ -30,7 +31,7 @@
     "enabled": true,
     "model_name": "pixtral",
     "id": "mistralai/Pixtral-12B-2409",
-    "path": "/models/Pixtral-12B-2409",
+    "path": "/home/sym/VSC/iris/models/Pixtral-12B-2409",
     "quantization": {
       "enabled": true,
       "load_in_8bit": true,
@@ -50,16 +51,15 @@
   "logging": {
     "level": "INFO",
     "log_to_file": true,
-    "mistral": "/logs/mistral.log",
-    "pixtral": "/logs/pixtral.log"
+    "log_path":"/home/sym/VSC/iris/logs/logs.log"
   },
   "security": {
     "rate_limit_per_minute": 30,
     "allow_external_scripts": false,
     "user_authentication": {
       "enabled": true,
-      "method": "UserSession_getpass",
-      "bank_path": "/data/user_bank.json"
+      "method": "SessionManager",
+      "bank_path": "/home/sym/VSC/iris/data"
     }
   },
   "settings": {

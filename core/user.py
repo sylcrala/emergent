@@ -10,18 +10,24 @@ import json
 
 import uuid
 import getpass
-from core._logger import logger, USER_LEVEL
-from core.core import load_config
+from ext._logger import logger, USER_LEVEL
+from ext.config_loader import main_config
 
-userbank_path = load_config()["security"]["authentication"]["bank_path"]
 
-class UserSession:
+config = main_config
+
+
+class SessionManager:
     def __init__(self):
-        self.active_user = {}
-        self.userbank = {}
-        self.userbank_path = userbank_path
+        self.active_user = None
+        self.session_data = {}
+        self.users_path = config["security"]["user_authentication"]["bank_path"]
 
-        if not self.userbank:
+
+
+
+
+    """     if not self.userbank:
             logger.log(USER_LEVEL, "[User Authentication] No user bank found. Creating a new one.")
             self.userbank = {}
             self.save_userbank()
@@ -37,22 +43,26 @@ class UserSession:
         else:
             logger.log(USER_LEVEL, f"[User Authentication] User {self.active_user['username']} login failed.")
             self.user_logout()
+    """
+
+
+
 
 
 
     #--# user auth bank verify, load, save func #--#
     def load_userbank(self):
-        if not os.path.exists(userbank_path):
-            with open(userbank_path, "w") as f:
+        if not os.path.exists(self.users_path): #checking existence, and creating if doesnt exist
+            with open(self.users_path, "w") as f:
                 json.dump({}, f)
-        with open(userbank_path, "r") as f:
+        with open(self.users_path, "r") as f:
             return json.load(f)
 
     def save_userbank(self):
-        with open(userbank_path, "w") as f:
-            json.dump(self.userbank, f, indent=2)
-            logger.log(USER_LEVEL, f"[User Authentication] User bank saved to {userbank_path}")
-        logger.log(USER_LEVEL, f"[User Authentication] User bank loaded from {userbank_path}")
+        with open(self.users_path, "w") as f:
+            json.dump(self.session_data, f, indent=2)
+            logger.log(USER_LEVEL, f"[User Authentication] User bank saved to {self.users_path}")
+        logger.log(USER_LEVEL, f"[User Authentication] User bank loaded from {self.users_path}")
         return self.userbank
     #--#
 
@@ -82,28 +92,39 @@ class UserSession:
 
     #--# login/logout funcs #--#
     def check_user_exists(self, username):
-        if username in self.userbank:
+        if username in self.session_data:
             return True
         else:
             return False
+        
+   #def create_user(self, username, password):
+
+
 
     def user_login(self, username, password):
-        if self.check_user_exists(self, username=username) == True:
-            if self.userbank[username]["password"] == password:
-                self.active_user = self.userbank[username]
+        if self.check_user_exists(self, username=username) == True: #checking if user exists
+            if self.sesson_data[username]["password"] == password: #checking password
+                self.active_user = self.userbank[username] 
+                self.session_data[username] = {
+                    "memory": [],
+                    "logs": []
+                }
                 print(f"Welcome back, {username}!")
                 logger.log(USER_LEVEL, f"[User Authentication] User {username} logged in successfully.")
                 return True
+            
             else:
                 print("Incorrect password.")
                 logger.log(USER_LEVEL, f"[User Authentication] User {username} login failed: Incorrect password.")
                 return False
+            
         elif self.check_user_exists(self, username=username) == False:
             print("User not found, creating new user. Welcome to Iris!")
             logger.log(USER_LEVEL, f"[User Authentication] User {username} not found, creating new user.")
             self.create_user(username, password)
             return True 
-        
+        ##
+
     def user_logout(self): 
         if self.active_user:
             print(f"Goodbye, {self.active_user['username']}!")
@@ -112,4 +133,11 @@ class UserSession:
         else:
             logger.log(USER_LEVEL, "[User Authentication] No user is currently logged in.")
 
+    def is_logged_in(self):
+        return self.active_user is not None
 
+    def get_user_memory(self):
+        if self.active_user:
+            return self.session_data[self.active_user]["memory"]
+        return []
+    

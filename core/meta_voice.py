@@ -15,7 +15,7 @@
 
 #--# modifiers #--#
 VOICE_MATRIX = {
-    "reflective": {
+    "reflective-analytical":{
         "temperature": 0.3,
         "top_p": 0.85,
         "presence_penalty": 0.2,
@@ -50,6 +50,15 @@ VOICE_MATRIX = {
         "frequency_penalty": 0.1,
         "prefix": "That must be difficult. Let's walk through it gently:",
     },
+    "freeform": {
+        "do_sample":True,
+        "temperature":1.1,
+        "top_p":0.9,
+        "top_k":60,
+        "repetition_penalty":1.1,
+        "max_new_tokens":300,
+        "prefix": "",
+    }
     # Add more: "sarcastic", "detached", "visionary", "poetic", etc.
 }
 
@@ -80,7 +89,6 @@ def choose_meta_voice(user_input):
 
 
 
-
 #--# applying voices to output #--#
 def apply_meta_voice(text, voice):
     profile = VOICE_MATRIX.get(voice, VOICE_MATRIX["neutral"])
@@ -90,6 +98,7 @@ def apply_meta_voice(text, voice):
         "top_p": profile.get("top_p", 0.9),
         "presence_penalty": profile.get("presence_penalty", 0.0),
         "frequency_penalty": profile.get("frequency_penalty", 0.0),
+        "do_sample": False,
     }
                                
     if not voice:
@@ -101,3 +110,36 @@ def apply_meta_voice(text, voice):
         modified_text = modifier(modified_text)
 
     return modified_text
+
+
+
+
+
+
+
+
+
+def determine_voice(self, user_input: str, context: str = "") -> str:
+    """
+    Dynamically selects a meta-voice modifier based on prompt content or context.
+    """
+    lowered = user_input.lower()
+    if "why" in lowered or "meaning" in lowered:
+        return "curious"
+    elif "haha" in lowered or "joke" in lowered:
+        return "playful"
+    elif "dream" in lowered or "imagine" in lowered:
+        return "curious"
+    elif "analyze" in lowered or "reflect" in lowered:
+        return "reflective-analytical"
+    elif "really?" in lowered or "sure" in lowered:
+        return "freeform"
+    elif "okay" in lowered or "fine" in lowered or "hurt" in lowered:
+        return "empathetic"
+    else:
+        return "freeform"
+
+
+
+
+

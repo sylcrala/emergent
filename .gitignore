@@ -1,3 +1,6 @@
 /models/
 /data/
 /__pycache__/
+/core/__pycache__/
+/core/ext/__pycache__/
+/utils/__pycache__/

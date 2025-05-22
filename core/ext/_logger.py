@@ -5,7 +5,7 @@
 
 import os
 import json
-from core.core import load_config  # or inline config if easier
+from core.ext.config_loader import main_config
 import logging
 from logging.handlers import RotatingFileHandler
 
@@ -24,7 +24,7 @@ logging.addLevelName(WARN_LEVEL, "WARNING")
 #
 
 #import config
-config = load_config()
+config = main_config
 log_cfg = config.get("logging", {})
 #
 
